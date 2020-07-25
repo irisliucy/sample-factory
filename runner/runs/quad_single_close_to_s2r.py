@@ -27,7 +27,7 @@ _experiment = Experiment(
     _params.generate_params(randomize=False),
 )
 
-RUN_DESCRIPTION = RunDescription('quads_single_based_on_lunch_mlp_v102_4seeds', experiments=[_experiment])
+RUN_DESCRIPTION = RunDescription('quads_single_close_to_s2r_v102_4seeds', experiments=[_experiment])
 
 # Based on https://github.com/amolchanov86/quad_sim2multireal/blob/master/quad_train/config/ppo__crazyflie_baseline.yml
 # seed: 1
