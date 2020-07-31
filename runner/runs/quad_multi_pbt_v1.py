@@ -8,7 +8,7 @@ _params = ParamGrid([
 _experiment = Experiment(
     'quads_pbt_multi',
     'python -m algorithms.appo.train_appo --env=quadrotor_multi --train_for_env_steps=1000000000 --algo=APPO '
-    '--gamma=0.99 --learning_rate=0.0001'
+    '--gamma=0.99 --learning_rate=0.0001 '
     '--use_rnn=False --num_workers=72 --num_envs_per_worker=4 --num_policies=6 --rollout=128 '
     '--recurrence=1 --benchmark=False --pbt_replace_reward_gap=0.1 '
     '--pbt_replace_reward_gap_absolute=200.0 --pbt_period_env_steps=1000000 --pbt_start_mutation=20000000 '
