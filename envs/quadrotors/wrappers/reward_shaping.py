@@ -1,6 +1,7 @@
 import gym
 import numpy as np
-
+from gym_art.quadrotor_multi.quadrotor_multi import QuadrotorEnvMulti
+from gym_art.quadrotor_single.quadrotor import QuadrotorEnv
 
 DEFAULT_QUAD_REWARD_SHAPING = dict(
     quad_rewards=dict(
@@ -37,6 +38,14 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
             env_reward_shaping[key] = weight
 
         obs, rewards, dones, infos = self.env.step(action)
+
+        # if isinstance(self.env, QuadrotorEnv):
+        #     infos_multi, dones_multi = [infos], [dones]
+        # elif isinstance(self.env, QuadrotorEnvMulti):
+        #     infos_multi, dones_multi = infos, dones
+        # else:
+        #     raise NotImplementedError('The environment is not supported')
+
         if self.num_agents == 1:
             infos_multi, dones_multi = [infos], [dones]
         else:
@@ -53,7 +62,8 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
 
             if dones_multi[i]:
                 true_reward = self.cumulative_rewards[i]['rewraw_main']
-                info['true_reward'] = true_reward
+                info[f'true_reward_{i}'] = true_reward
+
                 info['episode_extra_stats'] = self.cumulative_rewards[i]
 
                 episode_actions = np.array(self.episode_actions)
