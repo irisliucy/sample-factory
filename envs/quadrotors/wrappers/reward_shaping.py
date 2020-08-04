@@ -62,7 +62,7 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
 
             if dones_multi[i]:
                 true_reward = self.cumulative_rewards[i]['rewraw_main']
-                info[f'true_reward_{i}'] = true_reward
+                info['true_reward'] = true_reward
 
                 info['episode_extra_stats'] = self.cumulative_rewards[i]
 
