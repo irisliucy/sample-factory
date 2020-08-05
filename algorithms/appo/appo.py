@@ -590,7 +590,7 @@ class APPO(ReinforcementLearningAlgorithm):
                     writer.add_scalar(f'0_aux/avg_{key}', float(stat_value), env_steps)
 
                     # for key stats report min/max as well
-                    if key in ('reward', 'true_reward', 'len'):
+                    if key in ('reward', 'true_reward', 'len') or key.startswith('single_'):
                         writer.add_scalar(f'0_aux/avg_{key}_min', float(min(stat[policy_id])), env_steps)
                         writer.add_scalar(f'0_aux/avg_{key}_max', float(max(stat[policy_id])), env_steps)
 

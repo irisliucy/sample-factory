@@ -22,6 +22,8 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
 
         # save a reference to this wrapper in the actual env class, for other wrappers
         self.env.unwrapped._reward_shaping_wrapper = self
+        self.rewards = []
+        self.true_rewards = []
 
     def reset(self):
         obs = self.env.reset()
@@ -38,6 +40,7 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
             env_reward_shaping[key] = weight
 
         obs, rewards, dones, infos = self.env.step(action)
+        self.rewards.append(rewards)
 
         # if isinstance(self.env, QuadrotorEnv):
         #     infos_multi, dones_multi = [infos], [dones]
@@ -62,7 +65,9 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
 
             if dones_multi[i]:
                 true_reward = self.cumulative_rewards[i]['rewraw_main']
-                info['true_reward'] = true_reward
+
+                # info[f'true_reward_{i}'] = true_reward
+                self.true_rewards.append(true_reward)
 
                 info['episode_extra_stats'] = self.cumulative_rewards[i]
 
@@ -77,6 +82,16 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
                 self.cumulative_rewards[i] = dict()
 
         if any(dones_multi):
+            for i in range(len(infos)):
+                tmp_rewards = np.array(self.rewards)
+                infos[i]['episode_extra_stats'][f'single_reward_{i}'] = np.sum(tmp_rewards, 0)[i]
+                infos[i]['total_reward'] = np.sum(tmp_rewards)
+
+                infos[i]['episode_extra_stats'][f'single_true_reward_{i}'] = self.true_rewards[i]
+                infos[i]['true_reward'] = sum(self.true_rewards)
+
+            self.rewards = []
+            self.true_rewards = []
             self.episode_actions = []
 
         return obs, rewards, dones, infos
