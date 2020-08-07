@@ -66,8 +66,10 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
             if dones_multi[i]:
                 true_reward = self.cumulative_rewards[i]['rewraw_main']
 
-                # info[f'true_reward_{i}'] = true_reward
-                self.true_rewards.append(true_reward)
+                if self.num_agents == 1:
+                    info['true_reward'] = true_reward
+                else:
+                    self.true_rewards.append(true_reward)
 
                 info['episode_extra_stats'] = self.cumulative_rewards[i]
 
@@ -82,13 +84,15 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
                 self.cumulative_rewards[i] = dict()
 
         if any(dones_multi):
-            for i in range(len(infos)):
-                tmp_rewards = np.array(self.rewards)
-                infos[i]['episode_extra_stats'][f'single_reward_{i}'] = np.sum(tmp_rewards, 0)[i]
-                infos[i]['total_reward'] = np.sum(tmp_rewards)
 
-                infos[i]['episode_extra_stats'][f'single_true_reward_{i}'] = self.true_rewards[i]
-                infos[i]['true_reward'] = sum(self.true_rewards)
+            if self.num_agents > 1:
+                for i in range(len(infos)):
+                    tmp_rewards = np.array(self.rewards)
+                    infos[i]['episode_extra_stats'][f'single_reward_{i}'] = np.sum(tmp_rewards, 0)[i]
+                    infos[i]['total_reward'] = np.sum(tmp_rewards)
+
+                    infos[i]['episode_extra_stats'][f'single_true_reward_{i}'] = self.true_rewards[i]
+                    infos[i]['true_reward'] = sum(self.true_rewards)
 
             self.rewards = []
             self.true_rewards = []
