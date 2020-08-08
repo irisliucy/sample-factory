@@ -65,14 +65,14 @@ def make_quadrotor_env_multi(cfg, **kwargs):
 
     rew_coeff = DEFAULT_QUAD_REWARD_SHAPING['quad_rewards']
 
-    dynamics_change = dict(noise=dict(thrust_noise_ratio=0.05), damp=dict(vel=0, omega_quadratic=0))
+    dynamics_change = dict(noise=dict(thrust_noise_ratio=0.0), damp=dict(vel=0, omega_quadratic=0))
 
     num_agents = 4
     env = QuadrotorEnvMulti(
         num_agents=num_agents,
         dynamics_params=quad, raw_control=raw_control, raw_control_zero_middle=raw_control_zero_middle,
         dynamics_randomize_every=dyn_randomize_every, dynamics_change=dynamics_change, dyn_sampler_1=sampler_1,
-        sense_noise=sense_noise, init_random_state=True, ep_time=episode_duration, rew_coeff=rew_coeff,
+        sense_noise=None, init_random_state=True, ep_time=episode_duration, rew_coeff=rew_coeff,
     )
 
     reward_shaping = copy.deepcopy(DEFAULT_QUAD_REWARD_SHAPING)
