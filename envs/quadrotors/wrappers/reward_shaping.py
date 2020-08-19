@@ -1,6 +1,6 @@
 import gym
 import numpy as np
-
+import copy
 
 DEFAULT_QUAD_REWARD_SHAPING = dict(
     quad_rewards=dict(
@@ -21,6 +21,7 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
 
         # save a reference to this wrapper in the actual env class, for other wrappers
         self.env.unwrapped._reward_shaping_wrapper = self
+        self.rewards = []
 
     def reset(self):
         obs = self.env.reset()
@@ -37,6 +38,8 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
             env_reward_shaping[key] = weight
 
         obs, rewards, dones, infos = self.env.step(action)
+        self.rewards.append(rewards)
+
         if self.num_agents == 1:
             infos_multi, dones_multi = [infos], [dones]
         else:
@@ -55,6 +58,9 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
                 true_reward = self.cumulative_rewards[i]['rewraw_main']
                 info['true_reward'] = true_reward
                 info['episode_extra_stats'] = self.cumulative_rewards[i]
+                tmp_log_cumulative_rewards = copy.deepcopy(self.cumulative_rewards[i])
+                for key, value in tmp_log_cumulative_rewards.items():
+                    infos[i]['episode_extra_stats'][f'single_{key}_{i}'] = value
 
                 episode_actions = np.array(self.episode_actions)
                 episode_actions = episode_actions.transpose()
@@ -67,6 +73,11 @@ class QuadsRewardShapingWrapper(gym.Wrapper):
                 self.cumulative_rewards[i] = dict()
 
         if any(dones_multi):
+            for i in range(len(infos)):
+                tmp_rewards = np.array(self.rewards)
+                infos[i]['episode_extra_stats'][f'single_reward_{i}'] = np.sum(tmp_rewards, 0)[i]
+
+            self.rewards = []
             self.episode_actions = []
 
         return obs, rewards, dones, infos
