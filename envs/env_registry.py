@@ -124,6 +124,11 @@ def register_default_envs(env_registry):
         from envs.voxel_env.voxel_env_utils import make_voxel_env, add_voxel_env_args, voxel_env_override_defaults
         return make_voxel_env, add_voxel_env_args, voxel_env_override_defaults
 
+    def gym_funcs():
+        from envs.gym.gym_utils import make_gym_env
+        from envs.gym.gym_params import gym_override_defaults, add_gym_env_args
+        return make_gym_env, add_gym_env_args, gym_override_defaults
+
     default_envs = {
         'doom_': doom_funcs,
         'atari_': atari_funcs,
@@ -132,6 +137,7 @@ def register_default_envs(env_registry):
         'quadrotor_': quadrotors_funcs,
         'MiniGrid': minigrid_funcs,
         'voxel_env_': voxel_env_funcs,
+        'gym_': gym_funcs,
     }
 
     for envs_prefix, env_funcs in default_envs.items():
