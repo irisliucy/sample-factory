@@ -53,11 +53,11 @@ class PbtTask(Enum):
 
 
 HYPERPARAMS_TO_TUNE = {
-    'learning_rate', 'entropy_loss_coeff', 'value_loss_coeff', 'max_grad_norm', 'ppo_clip_ratio', 'ppo_clip_value',
+    'learning_rate', 'exploration_loss_coeff', 'value_loss_coeff', 'max_grad_norm', 'ppo_clip_ratio', 'ppo_clip_value',
 }
 
 # HYPERPARAMS_TO_TUNE_EXTENDED = {
-#     'learning_rate', 'entropy_loss_coeff', 'value_loss_coeff', 'adam_beta1', 'max_grad_norm',
+#     'learning_rate', 'exploration_loss_coeff', 'value_loss_coeff', 'adam_beta1', 'max_grad_norm',
 #     'ppo_clip_ratio', 'ppo_clip_value', 'vtrace_rho', 'vtrace_c',
 # }
 
@@ -301,7 +301,7 @@ class PopulationBasedTraining:
 
             replacement_policy_candidate = random.choice(best_policies)
             reward_delta = target_objectives[replacement_policy_candidate] - target_objectives[policy_id]
-            reward_delta_relative = abs(reward_delta / (target_objectives[replacement_policy_candidate] + EPS))
+            reward_delta_relative = abs(reward_delta / (target_objectives[replacement_policy_candidate] + EPS))  # TODO: this might not work correctly with negative rewards
 
             if abs(reward_delta) > self.cfg.pbt_replace_reward_gap_absolute and reward_delta_relative > self.cfg.pbt_replace_reward_gap:
                 replacement_policy = replacement_policy_candidate
