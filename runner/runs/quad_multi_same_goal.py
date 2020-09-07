@@ -5,6 +5,7 @@ _params = ParamGrid([
     ('quads_num_agents', [6]),
     ('quads_episode_duration', [15.0]),
     ('quads_collision_reward', [0.0, 0.5]),
+    ('quads_mode', ['same_goal']),
 ])
 
 _experiment = Experiment(

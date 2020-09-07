@@ -6,6 +6,7 @@ _params = ParamGrid([
     ('quads_settle_reward', [0.1]),
     ('quads_episode_duration', [14.0]),
     ('quads_collision_reward', [0.0, 0.5]),
+    ('quads_mode', ['circular_config']),
 ])
 
 _experiment = Experiment(
