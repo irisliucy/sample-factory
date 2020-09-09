@@ -4,8 +4,9 @@ _params = ParamGrid([
     ('seed', [1111, 2222, 3333, 4444]),
     ('quads_num_agents', [6]),
     ('quads_episode_duration', [15.0]),
-    ('quads_collision_reward', [0.0, 0.5]),
     ('quads_mode', ['same_goal']),
+    ('quads_dist_between_goals', [0.0]),
+    ('quads_collision_reward', [0.0, 0.5]),
 ])
 
 _experiment = Experiment(

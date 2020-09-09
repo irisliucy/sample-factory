@@ -3,7 +3,7 @@ from runner.run_description import RunDescription, Experiment, ParamGrid
 _params = ParamGrid([
     ('seed', [1111, 2222, 3333, 4444]),
     ('quads_num_agents', [6]),
-    ('quads_settle_reward', [1.0]),
+    ('quads_settle_reward', [0.1]),
     ('quads_episode_duration', [14.0]),
     ('quads_collision_reward', [0.0, 0.5]),
     ('quads_mode', ['circular_config']),
